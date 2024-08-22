@@ -32,6 +32,7 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
+
   var favorites = <WordPair>[];
 
   void toggleFavorite() {
@@ -53,6 +54,18 @@ class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        page = GeneratorPage();
+        break;
+      case 1:
+        page = Placeholder();
+        break;
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
+
     return Scaffold(
       body: Row(
         children: [
@@ -72,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedIndex: selectedIndex,
               onDestinationSelected: (value) {
                 setState(() {
-                selectedIndex = value;
+                  selectedIndex = value;
                 });
               },
             ),
@@ -80,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
+              child: page,
             ),
           ),
         ],
@@ -88,7 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
 
 class GeneratorPage extends StatelessWidget {
   @override
@@ -146,15 +158,16 @@ class BigCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-       color: theme.colorScheme.onPrimary,
+      color: theme.colorScheme.onPrimary,
     );
     return Card(
       color: theme.colorScheme.primary,
       child: Padding(
         padding: const EdgeInsets.all(23.0),
-        child: Text(pair.asLowerCase,
-        style: style,
-        semanticsLabel: pair.asPascalCase,
+        child: Text(
+          pair.asLowerCase,
+          style: style,
+          semanticsLabel: pair.asPascalCase,
         ),
       ),
     );
